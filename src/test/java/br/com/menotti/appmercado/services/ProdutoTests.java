@@ -2,15 +2,12 @@ package br.com.menotti.appmercado.services;
 
 import br.com.menotti.appmercado.model.Produto;
 import br.com.menotti.appmercado.repository.ProdutoRepo;
-import br.com.menotti.appmercado.service.IProdutoService;
-import br.com.menotti.appmercado.service.ProdutoServiceImpl;
-import org.junit.jupiter.api.BeforeAll;
+import br.com.menotti.appmercado.service.produto.ProdutoServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 

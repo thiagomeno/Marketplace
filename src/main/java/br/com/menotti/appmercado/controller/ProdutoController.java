@@ -1,12 +1,19 @@
 package br.com.menotti.appmercado.controller;
+import java.util.List;
 
-import br.com.menotti.appmercado.model.Produto;
-import br.com.menotti.appmercado.service.IProdutoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
+import br.com.menotti.appmercado.dto.StatusMessage;
+import br.com.menotti.appmercado.model.Produto;
+import br.com.menotti.appmercado.service.produto.IProdutoService;
 
 @RestController
 public class ProdutoController {
@@ -14,32 +21,51 @@ public class ProdutoController {
     @Autowired
     private IProdutoService service;
 
-    @PostMapping("/produtos")
-    public ResponseEntity<Produto>  cadastrarNovo(@RequestBody Produto novo){
-        Produto prod = service.criarNovoProduto(novo);
-        if (prod != null){
-            return ResponseEntity.status(201).body(prod);
-        }
-        return ResponseEntity.badRequest().build();
-    }
-
-    @GetMapping("/produtos/search")
-    public ResponseEntity<List<Produto>> recuperarPorPalavraChave(@RequestParam(name="k") String keyword){
-        return ResponseEntity.ok(service.buscarPorPalavraChave(keyword));
+    @GetMapping("/produtos")
+    public List<Produto> getAll(){
+        return service.buscarTodos();
     }
 
     @GetMapping("/produtos/{id}")
-    public ResponseEntity<Produto> recuperarPorId(@PathVariable Integer id){
-        Produto res = service.buscarPorId(id);
-        if (res != null){
+    public ResponseEntity<?> getById(@PathVariable Integer id) {
+        Produto res = service.buscarPeloId(id);
+        if (res != null) {
             return ResponseEntity.ok(res);
         }
-        return ResponseEntity.notFound().build();
+        return ResponseEntity.status(404).body(new StatusMessage("Nao encontrei produto de id:"+id));
     }
 
-    @GetMapping
-    public ResponseEntity<List<Produto>> recuperarTodos(){
-        return ResponseEntity.ok(service.listarTodos());
+    @GetMapping("/produtos/search")
+    public List<Produto> getByKeyword(@RequestParam(name = "k") String k){
+        return service.buscarPorPalavraChave(k);
+    }
+
+    @PostMapping("/produtos")
+    public ResponseEntity<Produto> addNew(@RequestBody Produto p){
+        try {
+            Produto res = service.criarNovoProduto(p);
+            if (res != null) {
+                return ResponseEntity.status(201).body(res);
+            }
+            return ResponseEntity.badRequest().build();
+        }
+        catch(Exception ex) {
+            return ResponseEntity.status(500).build();
+        }
+    }
+
+    @PutMapping("/produtos/{id}")
+    public ResponseEntity<Produto> updateProduct(@RequestBody Produto p, @PathVariable Integer id){
+        try {
+            p.setId(id);
+            Produto res = service.alterarDadosProduto(p);
+            if (res != null) {
+                return ResponseEntity.ok(res);
+            }
+            return ResponseEntity.badRequest().build();
+        }
+        catch(Exception ex) {
+            return ResponseEntity.status(500).build();
+        }
     }
 }
-

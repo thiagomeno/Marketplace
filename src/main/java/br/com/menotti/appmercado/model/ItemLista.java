@@ -1,23 +1,30 @@
 package br.com.menotti.appmercado.model;
-
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
 @Entity
 @Table(name = "tbl_itemlista")
 public class ItemLista {
+
     @Id
+    @Column(name = "id_item")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "num_seq")
-    private Integer numSeq;
+    private Integer id;
 
     @Column(name = "quantidade")
-    private Double quantidade;
+    private Double  quantidade;
+
+    @Column(name = "preco_unit")
+    private Double  precoUnitario;
 
     @Column(name = "preco_total")
-    private Double precoTotal;
-
-    @Column(name = "concluido")
-    private Integer concluido;
+    private Double  precoTotal;
 
     @ManyToOne
     @JoinColumn(name = "tbl_produto_id_produto")
@@ -25,14 +32,14 @@ public class ItemLista {
 
     @ManyToOne
     @JoinColumn(name = "tbl_lista_id_lista")
-    private Lista lista;
+    private ListaDeCompras lista;
 
-    public Integer getNumSeq() {
-        return numSeq;
+    public Integer getId() {
+        return id;
     }
 
-    public void setNumSeq(Integer numSeq) {
-        this.numSeq = numSeq;
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public Double getQuantidade() {
@@ -43,20 +50,20 @@ public class ItemLista {
         this.quantidade = quantidade;
     }
 
+    public Double getPrecoUnitario() {
+        return precoUnitario;
+    }
+
+    public void setPrecoUnitario(Double precoUnitario) {
+        this.precoUnitario = precoUnitario;
+    }
+
     public Double getPrecoTotal() {
         return precoTotal;
     }
 
     public void setPrecoTotal(Double precoTotal) {
         this.precoTotal = precoTotal;
-    }
-
-    public Integer getConcluido() {
-        return concluido;
-    }
-
-    public void setConcluido(Integer concluido) {
-        this.concluido = concluido;
     }
 
     public Produto getProduto() {
@@ -67,11 +74,12 @@ public class ItemLista {
         this.produto = produto;
     }
 
-    public Lista getLista() {
+    public ListaDeCompras getLista() {
         return lista;
     }
 
-    public void setLista(Lista lista) {
+    public void setLista(ListaDeCompras lista) {
         this.lista = lista;
     }
+
 }
